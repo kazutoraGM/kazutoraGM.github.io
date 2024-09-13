@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belleza & Estilo Jeffersson Salon y Spa</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        /* Colores personalizados */
+        body {
+            background-color: #ebdac5; /* Fondo claro para contraste */
+        }
+        .header-background {
+            background-color: #f2c17d; /* Color dorado claro para el encabezado */
+        }
+        .header-background img {
+            width: 100%;
+            height: auto;
+            max-height: 350px; /* Ajusta la altura máxima según sea necesario */
+        }
+        .btn-primary {
+            background-color: #d63384; /* Color rosado para los botones */
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #c810f0;
+        }
+        .modal-content {
+            border-radius: 0.5rem;
+        }
+        .selected-appointment {
+            display: none;
+            background-color: #fff3e6; /* Fondo suave para el panel de citas */
+            padding: 20px;
+            border: 1px solid #d8d8d8;
+            border-radius: 0.5rem;
+        }
+        .footer-background {
+            background-color: #f2c17d; /* Color dorado para el pie de página */
+            padding: 20px;
+            text-align: center;
+        }
+        .appointments {
+            background-color: #f2c17d; /* Fondo dorado */
+            border: 1px solid #d8d8d8;
+            border-radius: 0.5rem;
+            padding: 20px;
+            position: relative; /* Añadido para posicionamiento de la imagen */
+        }
+        .appointments h2 {
+            color: #d63384; /* Color rosado para el título */
+        }
+        .appointments .appointment-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .appointments .appointment-list .card {
+            flex: 1 1 calc(33% - 10px);
+            margin-bottom: 10px;
+        }
+        .list-group-item {
+            background-color: #f8f9fa; /* Fondo claro para elementos de la lista */
+            border-color: #d8d8d8; /* Borde gris claro */
+        }
+        .list-group-item:nth-child(odd) {
+            background-color: #f2f2f2; /* Alternar el color de fondo en elementos de la lista */
+        }
+        .image-container {
+            position: relative;
+            height: 10px; /* Ajusta la altura según sea necesario */
+            margin-top: 10px; /* Espacio arriba de la imagen */
+        }
+        .appointment-image {
+            position: absolute;
+            bottom: -690px; /* Baja la imagen un 10% más de la altura original */
+            right: 30px;
+            max-width: 50%; /* Ajusta el ancho según sea necesario */
+            height: auto;
+            z-index: 50; /* Coloca la imagen detrás del texto */
+            opacity: 100; /* Ajusta la opacidad si es necesario */
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .nav-item {
+            list-style: none;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #d63384; /* Color rosado para los enlaces */
+            font-weight: bold;
+            position: relative;
+        }
+        .nav-link img {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .nav-link:hover {
+            color: #c810f0;
+        }
+        #contactanos {
+            text-align: left; /* Alinea el texto a la izquierda */
+        }
+        .contact-list {
+            display: flex; /* Alinea los elementos de la lista horizontalmente */
+            justify-content: flex-start; /* Alinea los elementos al inicio */
+            padding: 0;
+            list-style-type: none; /* Elimina los puntos de la lista */
+        }
+        .contact-list li {
+            margin-right: 15px; /* Espacio entre los elementos de la lista */
+        }
+        .contact-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px; /* Espacio entre el ícono y el texto */
+        }
+        /* Estilo para los títulos */
+        h2 {
+            color: #d63384; /* Color rosado para los títulos */
+        }
+        #servicios h2,
+        #promociones h2,
+        #contactanos h2 {
+            font-size: 1.5rem; /* Tamaño de fuente ajustable */
+            margin-bottom: 20px; /* Espacio inferior ajustable */
+        }
+        /* Estilos generales para móviles */
+@media (max-width: 768px) {
+    .header-background img {
+        max-height: 200px; /* Reduce el tamaño de la imagen en pantallas más pequeñas */
+    }
+
+    .appointments .appointment-list .card {
+        flex: 1 1 100%; /* Hace que las tarjetas de citas ocupen toda la pantalla en móviles */
+    }
+
+    .image-container {
+        height: auto; /* Ajusta la altura de la imagen en móviles */
+    }
+
+    .appointment-image {
+        bottom: 0;
+        right: 0;
+        max-width: 100%; /* Ajusta el ancho completo en pantallas pequeñas */
+    }
+
+    .nav {
+        flex-direction: column; /* Los elementos del menú se apilan en lugar de estar alineados horizontalmente */
+    }
+
+    .btn-lg {
+        width: 100%; /* Los botones ocuparán el ancho completo en móviles */
+    }
+}
+
+/* Estilos para tablets o pantallas medianas */
+@media (min-width: 768px) and (max-width: 1200px) {
+    .header-background img {
+        max-height: 300px;
+    }
+
+    .appointments .appointment-list .card {
+        flex: 1 1 calc(50% - 10px); /* En pantallas medianas, las tarjetas ocupan la mitad de la pantalla */
+    }
+
+    .appointment-image {
+        max-width: 70%; /* Ajusta el ancho de la imagen en tablets */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header class="header-background py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="logo">
+                <img src="457303433_969360965203903_6560600486250062424_n.jpg" alt="Logo del Salón">
+            </div>
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" href="#top"><img src="Inicio.png" alt="Inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#appointments"><img src="Citas.png" alt="Citas">Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios"><img src="Servicios.png" alt="Servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#promociones"><img src="Promociones.png" alt="Promociones">Promociones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contactanos"><img src="Contactanos.png" alt="Contáctanos">Contáctanos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row">
+            <!-- Sección de Agendar Cita y Citas del Día -->
+            <div class="col-md-8">
+                <section class="appointments mb-5">
+                    <h2 class="text-center">Citas del Día</h2>
+                    <div class="appointment-list">
+                        <!-- Tarjetas de citas se generan dinámicamente aquí -->
+                    </div>
+                    <div class="image-container">
+                        <img src="Imagen de WhatsApp 2024-09-12 a las 09.59.13_8506ba7c.jpg" class="appointment-image" alt="Imagen de Citas">
+                    </div>
+                </section>
+    
+                <button class="btn btn-primary btn-lg position-fixed bottom-0 end-0 m-4" onclick="openNewAppointmentForm()">+ Nueva Cita</button>
+    
+                <!-- Div para mostrar la cita seleccionada -->
+                <div id="selectedAppointment" class="selected-appointment text-center">
+                    <h3>Cita Seleccionada</h3>
+                    <p><strong>Fecha:</strong> <span id="selectedDate"></span></p>
+                    <p><strong>Hora:</strong> <span id="selectedTime"></span></p>
+                    <button class="btn btn-success" onclick="confirmAppointment()">Confirmar</button>
+                    <button class="btn btn-danger" onclick="rejectAppointment()">Rechazar</button>
+                </div>
+            </div>
+    
+            <!-- Sección de Servicios y Promociones -->
+            <aside class="col-md-4">
+                <section id="servicios" class="mb-5">
+                    <h2 class="text-center">SERVICIOS</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">Laceados</li>
+                        <li class="list-group-item">Botox</li>
+                        <li class="list-group-item">Cortes de cabello</li>
+                        <li class="list-group-item">Tratamientos</li>
+                        <li class="list-group-item">Maquillaje</li>
+                        <!-- Más servicios -->
+                    </ul>
+                </section>
+    
+                <section id="promociones" class="mb-5">
+                    <h2 class="text-center">PROMOCIONES VALIDO TODO SEPTIEMBRE</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">Gratis Perfilado</li>
+                        <li class="list-group-item">Gratis Planchado de cejas</li>
+                        <!-- Más promociones -->
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <div id="newAppointmentForm" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Agendar Nueva Cita</h3>
+                    <button type="button" class="btn-close" onclick="closeNewAppointmentForm()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm" onsubmit="saveAppointment(); return false;">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre de la Clienta:</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Teléfono:</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Servicio:</label>
+                            <select id="service" name="service" class="form-select" required>
+                                <option value="corte">Corte de Cabello</option>
+                                <option value="laciado">Laciado cacao</option>
+                                <option value="laciado">Laciado Dominicano</option>
+                                <option value="laciado">Laciado Organico</option>
+                                <option value="laciado">Laciado Dual</option>
+                                <option value="laciado">Laciado Japones Dual</option>
+                                <option value="laciado">Laciado Trial</option>
+                                <option value="botox">Botox Organico</option>
+                                <option value="botox">Botox Alizador</option>
+                                <option value="botox">Botox de Baor</option>
+                                <option value="maquillaje">Maquillaje</option>
+                                <option value="Tratamiento">Tratamiento de cabello</option>
+                                <option value="teñidos">Teñido de cabello</option>
+                                <!-- Más opciones aquí -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Fecha:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Hora:</label>
+                            <input type="time" id="time" name="time" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notas Adicionales:</label>
+                            <textarea id="notes" name="notes" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeNewAppointmentForm()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="contactanos" class="container my-5">
+        <h2>CONTACTANOS POR NUESTRAS REDES:</h2>
+        <p>Escríbenos mediante:</p>
+        <ul class="contact-list">
+            <li>
+                <a href="https://wa.me/5533991939352?text=Quiero%20agendar%20una%20cita">
+                    <img src="whatsapp.png" alt="WhatsApp" class="contact-icon"> WhatsApp
+                </a>
+            </li>
+            <li>
+                <a href="https://www.facebook.com/SalonYSpaJefferson?locale=es_LA">
+                    <img src="facebook.png" alt="Facebook" class="contact-icon"> Facebook
+                </a>
+            </li>
+            <li>
+                <a href="https://www.instagram.com/belleza.estilo.jeffer/">
+                    <img src="instagram.png" alt="Instagram" class="contact-icon"> Instagram
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <footer class="footer-background text-white">
+        <p>&copy; 2024 Belleza & Estilo Jeffersson Salon y Spa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openNewAppointmentForm() {
+            const modal = new bootstrap.Modal(document.getElementById('newAppointmentForm'));
+            modal.show();
+        }
+
+        function closeNewAppointmentForm() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newAppointmentForm'));
+            modal.hide();
+        }
+
+        function saveAppointment() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            const appointment = { name, phone, service, date, time };
+            let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            appointments.push(appointment);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            closeNewAppointmentForm();
+            displayAppointments();
+        }
+
+        function displayAppointments() {
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            const appointmentList = document.querySelector('.appointment-list');
+            appointmentList.innerHTML = '';
+
+            appointments.forEach((appointment, index) => {
+                const appointmentCard = document.createElement('div');
+                appointmentCard.classList.add('card');
+                appointmentCard.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${appointment.name}</h5>
+                        <p class="card-text"><strong>Servicio:</strong> ${appointment.service}</p>
+                        <p class="card-text"><strong>Fecha:</strong> ${appointment.date}</p>
+                        <p class="card-text"><strong>Hora:</strong> ${appointment.time}</p>
+                        <button class="btn btn-danger" onclick="deleteAppointment(${index})">Eliminar</button>
+                    </div>
+                `;
+                appointmentList.appendChild(appointmentCard);
+            });
+        }
+
+        function deleteAppointment(index) {
+            let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            appointments.splice(index, 1);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            displayAppointments();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayAppointments();
+        });
+    </script>
+    
+    
+</body>
+</html>
